@@ -2,6 +2,10 @@ import data
 import build_data
 import unittest
 
+from hw3 import population_total, filter_by_state, population_by_education, population_by_ethnicity, \
+    population_below_poverty_level, percent_by_education, percent_by_ethnicity, percent_below_poverty_level, \
+    education_greater_than, below_poverty_level_greater_than, ethnicity_greater_than, education_less_than, \
+    ethnicity_less_than, below_poverty_level_less_than
 
 # These two values are defined to support testing below. The
 # data within these structures should not be modified. Doing
@@ -10,7 +14,38 @@ import unittest
 # The data is defined here for visibility purposes in the context
 # of this course.
 full_data = build_data.get_data()
-
+ex = [data.CountyDemographics(
+    # age
+    {'Percent 65 and Older': 17.5,
+         'Percent Under 18 Years': 18.1,
+         'Percent Under 5 Years': 4.8},
+    # county
+    'San Luis Obispo County',
+    # education
+    {"Bachelor's Degree or Higher": 31.5,
+               'High School or Higher': 89.6},
+    # ethnicities
+    {'American Indian and Alaska Native Alone': 1.4,
+                 'Asian Alone': 3.8,
+                 'Black Alone': 2.2,
+                 'Hispanic or Latino': 22.0,
+                 'Native Hawaiian and Other Pacific Islander Alone': 0.2,
+                 'Two or More Races': 3.4,
+                 'White Alone': 89.0,
+                 'White Alone, not Hispanic or Latino': 69.5},
+    # income
+    {'Median Household Income': 58697,
+            'Per Capita Income': 29954,
+            'Persons Below Poverty Level': 14.3},
+    # population
+    {'2010 Population': 269637,
+                '2014 Population': 279083,
+                'Population Percent Change': 3.5,
+                'Population per Square Mile': 81.7},
+    # state
+    'CA'
+)
+]
 reduced_data = [
     data.CountyDemographics(
         {'Percent 65 and Older': 13.8,
@@ -174,33 +209,92 @@ reduced_data = [
          'Population per Square Mile': 3.0},
         'WY')
     ]
+class Test(unittest.TestCase):
 
-class TestCases(unittest.TestCase):
-    pass
-
-    # Part 1
+ # Part 1
     # test population_total
+    def test1_population_total(self):
+        self.assertEqual(population_total(reduced_data),655813)
+    def test2_population_total(self):
+        self.assertEqual(population_total(full_data),318857056)
 
     # Part 2
     # test filter_by_state
+    def test1_filter (self):
+        self.assertEqual(population_total(filter_by_state(full_data,'CA')),38802500)
 
     # Part 3
     # test population_by_education
-    # test population_by_ethnicity
-    # test population_below_poverty_level
+    def test_epop (self):
+        self.assertEqual(population_by_education(ex,"Bachelor's Degree or Higher"),87911.145)
 
+
+    def test2_epop(self):
+        self.assertEqual(population_by_education(ex, "Anita"), 0)
+
+    # test population_by_ethnicity
+    def test_eth (self):
+        self.assertEqual(population_by_ethnicity(ex,"Two or More Races"),9488.822)
+
+    def test2_epop(self):
+        self.assertEqual(population_by_ethnicity(ex, "Anita"), 0)
+    # test population_below_poverty_level
+    def test_pvl (self):
+        self.assertEqual(population_below_poverty_level(ex,"Persons Below Poverty Level"),39908.869000000006)
+
+    def test2_pvl(self):
+        self.assertEqual(population_by_ethnicity(ex, "Anita"), 0)
     # Part 4
     # test percent_by_education
+    def test_percent_e(self):
+        self.assertEqual(percent_by_education(ex,"Bachelor's Degree or Higher"),31.5)
+    def test2_percent_e(self):
+        self.assertEqual(percent_by_education(ex, "Ruben"), 0)
     # test percent_by_ethnicity
+    def test_percent_eth(self):
+        self.assertEqual(percent_by_ethnicity(ex, "Two or More Races"), 3.4000000000000004)
+    def test2_percent_eth(self):
+        self.assertEqual(percent_by_ethnicity(ex, "Ruben"), 0)
     # test percent_below_poverty_level
+    def test_percent_pv(self):
+        self.assertEqual(percent_below_poverty_level(ex,"Persons Below Poverty Level"),14.3)
+    def test2_percent_pv(self):
+        self.assertEqual(percent_below_poverty_level(ex, "Ruben"), 0)
 
     # Part 5
     # test education_greater_than
+    def test_ed_greater_than (self):
+        self.assertEqual(education_greater_than(ex,"Bachelor's Degree or Higher", 0),ex)
+    def test2_ed_greater_than(self):
+        self.assertEqual(education_greater_than(ex, "Bachelor's Degree or Higher", 80), [])
+
     # test education_less_than
+    def test_ed_less_than(self):
+        self.assertEqual(education_less_than(ex,"Bachelor's Degree or Higher",80),ex)
+    def test2_ed_less_than(self):
+        self.assertEqual(education_less_than(ex,"Bachelor's Degree or Higher",0),[])
+
     # test ethnicity_greater_than
+    def test_eth_greater_than(self):
+        self.assertEqual(ethnicity_greater_than(ex, "Two or More Races", 0), ex)
+    def test2_eth_greater_than(self):
+        self.assertEqual(ethnicity_greater_than(ex, "Two or More Races", 80), [])
     # test ethnicity_less_than
+    def test_eth_less_than(self):
+        self.assertEqual(ethnicity_less_than(ex,"Two or More Races",80),ex)
+    def test2_eth_less_than(self):
+        self.assertEqual(ethnicity_less_than(ex,"Two or More Races",0),[])
     # test below_poverty_level_greater_than
+    def test_pv_greater_than(self):
+        self.assertEqual(below_poverty_level_greater_than(ex, "Persons Below Poverty Level", 0), ex)
+    def test2_pv_greater_than(self):
+        self.assertEqual(below_poverty_level_greater_than(ex, "Persons Below Poverty Level", 80), [])
     # test below_poverty_level_less_than
+    def test_pv_less_than(self):
+        self.assertEqual(below_poverty_level_less_than(ex, "Persons Below Poverty Level", 80), ex)
+    def test2_pv_less_than(self):
+        self.assertEqual(below_poverty_level_less_than(ex, "Persons Below Poverty Level", 0), [])
+
 
 
 
