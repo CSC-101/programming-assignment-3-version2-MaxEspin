@@ -15,6 +15,7 @@ class CountyDemographics:
                   income: dict[str,float],
                   population: dict[str,float],
                   state: str):
+
         self.age = age
         self.county = county
         self.education = education
@@ -37,3 +38,5 @@ class CountyDemographics:
                 self.population,
                 self.state
             )
+
+
